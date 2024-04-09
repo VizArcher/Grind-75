@@ -1,0 +1,82 @@
+# Invert Binary Tree
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if (root == NULL)
+            return NULL;
+        
+        TreeNode* tmp; 
+        
+        tmp = root->left;
+        root->left = root->right;
+        root->right = tmp;
+
+        invertTree(root->left);
+        invertTree(root->right);
+        return root; 
+    }
+};
+
+## Explaination 
+  Certainly! Let's break down the provided code and understand its logic:
+
+  ```cpp
+  class Solution {
+  public:
+      TreeNode* invertTree(TreeNode* root) {
+          if (root == NULL)
+              return NULL;
+          
+          TreeNode* tmp; 
+          
+          tmp = root->left;
+          root->left = root->right;
+          root->right = tmp;
+  
+          invertTree(root->left);
+          invertTree(root->right);
+          return root; 
+      }
+  };
+  ```
+  
+  This code defines a class `Solution` with a member function `invertTree`. The purpose of this function is to invert a binary tree, swapping the left and right children of each node recursively.
+  
+  Let's break down the code:
+  
+  1. **Function Definition**: 
+      ```cpp
+      TreeNode* invertTree(TreeNode* root)
+      ```
+      - This function takes a pointer to the root of a binary tree (`TreeNode* root`) as input and returns a pointer to the inverted binary tree (`TreeNode*`).
+  
+  2. **Base Case**:
+      ```cpp
+      if (root == NULL)
+          return NULL;
+      ```
+      - This is the base case of the recursion. If the `root` pointer is `NULL`, it means the tree is empty, so we return `NULL`. This condition ensures that we handle the case of an empty tree.
+  
+  3. **Swapping Left and Right Children**:
+      ```cpp
+      TreeNode* tmp; 
+      tmp = root->left;
+      root->left = root->right;
+      root->right = tmp;
+      ```
+      - Here, we declare a pointer to `TreeNode` named `tmp`. Then, we swap the `left` and `right` children of the `root` node by assigning the `left` child to `tmp`, assigning the `right` child to `left`, and assigning `tmp` to `right`. This effectively swaps the children of the `root` node.
+  
+  4. **Recursive Calls**:
+      ```cpp
+      invertTree(root->left);
+      invertTree(root->right);
+      ```
+      - After swapping the children of the current node, we recursively call `invertTree` on the left and right subtrees of the current node. This ensures that the swapping operation is applied to all nodes in the tree.
+  
+  5. **Return Statement**:
+      ```cpp
+      return root; 
+      ```
+      - Finally, we return the pointer to the root of the inverted tree.
+  
+  This code effectively inverts the binary tree by recursively swapping the left and right children of each node. It handles the base case of an empty tree and ensures that the inversion process is applied to all nodes in the tree through recursive calls.
