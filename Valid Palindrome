@@ -1,0 +1,42 @@
+# Valid Palindrome
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int left = 0;
+        int right = s.length() - 1;
+
+        while (left < right) {
+            if (!isalnum(s[left])) {
+                left++;
+            } else if (!isalnum(s[right])) {
+                right--;
+            } else if (tolower(s[left]) != tolower(s[right])) {
+                return false;
+            } else {
+                left++;
+                right--;
+            }
+        }
+
+        return true;
+    }
+};
+
+# Explaination 
+This C++ code defines a class `Solution` with a member function `isPalindrome`. The `isPalindrome` function takes a string `s` as input and returns a boolean indicating whether `s` is a palindrome according to the conditions provided.
+
+Here's the explanation of the `isPalindrome` function:
+
+1. Initialize two pointers, `left` pointing to the start of the string and `right` pointing to the end of the string.
+
+2. Use a while loop to iterate until `left` is less than `right`. This loop will continue until the pointers meet or cross each other.
+
+3. Inside the loop:
+   - If the character at `s[left]` is not alphanumeric (i.e., it's not a letter or a number), increment `left` to move to the next character.
+   - If the character at `s[right]` is not alphanumeric, decrement `right` to move to the previous character.
+   - If both `s[left]` and `s[right]` are alphanumeric, compare the lowercase versions of these characters using `tolower` function. If they are not equal, return `false` indicating that `s` is not a palindrome.
+   - If both characters are alphanumeric and equal, increment `left` and decrement `right` to move to the next pair of characters to compare.
+
+4. If the loop completes without returning `false`, it means the string satisfies the palindrome condition, so return `true`.
+
+This approach effectively skips non-alphanumeric characters while comparing the characters from both ends of the string, ensuring that only alphanumeric characters are considered for palindrome comparison. Additionally, it handles the case sensitivity by converting characters to lowercase before comparison.
