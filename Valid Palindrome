@@ -22,7 +22,7 @@ public:
     }
 };
 
-# Explaination 
+## Explaination 
 This C++ code defines a class `Solution` with a member function `isPalindrome`. The `isPalindrome` function takes a string `s` as input and returns a boolean indicating whether `s` is a palindrome according to the conditions provided.
 
 Here's the explanation of the `isPalindrome` function:
