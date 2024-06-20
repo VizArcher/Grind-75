@@ -1,4 +1,4 @@
-# Implement Queue as Stack
+# Implement Queue as Stack - Done Myself
 class MyQueue {
 public:
 
