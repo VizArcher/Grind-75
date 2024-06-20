@@ -1,0 +1,37 @@
+# First Bad Version - Brute force TC -> O(n)
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        int ans;
+
+        for(int i = 1 ; i <= n ; i++){
+            if(isBadVersion(i) == true){
+                ans = i;
+                break;
+            }
+        }
+        return ans;
+    }
+};
+
+# Optimal approach - Binary search TC -> O(logn)
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        int start = 1;
+        int end = n;
+
+        while(start<end){
+            int mid = start+(end-start)/2;
+            bool isBad = isBadVersion(mid);
+            
+            if(isBad == true){
+                end = mid;
+            }
+            else{
+                start = mid +1; 
+            }
+        }
+        return start;
+    }
+};
