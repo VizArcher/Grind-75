@@ -1,0 +1,26 @@
+# K closest point to origin - My Solution 
+class Solution {
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        // Define a max-heap priority queue to store pairs of distance and points
+        priority_queue<pair<double, pair<int, int>>, vector<pair<double, pair<int, int>>>, greater<pair<double, pair<int, int>>>> q;
+
+        // Iterate through points and calculate distances
+        for (int i = 0; i < points.size(); ++i) {
+            double dist = sqrt(pow(points[i][0], 2) + pow(points[i][1], 2));
+            q.push({dist, {points[i][0], points[i][1]}});
+        }
+        
+        vector<vector<int>> res;
+
+        // Extract the k closest points from the priority queue
+        while (k > 0 && !q.empty()) {
+            auto point = q.top();
+            q.pop();
+            res.push_back({point.second.first, point.second.second});
+            k--;
+        }
+
+        return res;
+    }
+};
