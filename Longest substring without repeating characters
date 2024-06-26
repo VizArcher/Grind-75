@@ -1,0 +1,32 @@
+# Longest substring without repeating characters - We use sliding window and hash map - TC -> O(N) - SC -> O(256)
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char, int> charIndexMap;
+        int left = 0, right = 0;
+        int maxLength = 0;
+
+        while (right < s.size()) {
+            char currentChar = s[right];
+
+            // If the character is already in the map and within the current window
+            if (charIndexMap.find(currentChar) != charIndexMap.end() && charIndexMap[currentChar] >= left) {
+                // Move the left pointer to the right of the last occurrence
+                left = charIndexMap[currentChar] + 1;
+            }
+
+            // Update the character's index in the map
+            charIndexMap[currentChar] = right;
+
+            // Calculate the current window length and update maxLength
+            maxLength = max(maxLength, right - left + 1);
+
+            // Move the right pointer to expand the window
+            right++;
+        }
+
+        return maxLength;
+    }
+};
+
+# Brute force takes all substring and hash map 
