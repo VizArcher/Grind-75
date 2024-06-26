@@ -1,0 +1,31 @@
+#Binary Tree Level order Traversal
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+
+        if (root == NULL)
+            return res;
+        
+        queue<TreeNode*> q;
+        q.push(root);
+
+        while (!q.empty()) {
+            int levelSize = q.size();
+            vector<int> currentLevel;
+            
+            for (int i = 0; i < levelSize; ++i) {
+                TreeNode* current = q.front();
+                q.pop();
+                currentLevel.push_back(current->val);
+
+                if (current->left != NULL)
+                    q.push(current->left);
+                if (current->right != NULL)
+                    q.push(current->right);
+            }
+            res.push_back(currentLevel);
+        }
+        return res;
+    }
+};
