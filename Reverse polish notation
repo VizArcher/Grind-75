@@ -1,0 +1,31 @@
+# Reverse Polish notation
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<int> operand;
+
+        for (int i = 0; i < tokens.size(); i++) {
+            string token = tokens[i];
+            if (isdigit(token[0]) || (token.size() > 1 && token[0] == '-')) {
+                operand.push(stoi(token));
+            } else {
+                int operator_2 = operand.top(); operand.pop();
+                int operator_1 = operand.top(); operand.pop();
+
+                if (token == "+") {
+                    operand.push(operator_1 + operator_2);
+                } else if (token == "-") {
+                    operand.push(operator_1 - operator_2);
+                } else if (token == "*") {
+                    operand.push(operator_1 * operator_2);
+                } else if (token == "/") {
+                    operand.push(operator_1 / operator_2);
+                } else if (token == "^") {
+                    operand.push(pow(operator_1, operator_2));
+                }
+            }
+        }
+
+        return operand.top();
+    }
+};
