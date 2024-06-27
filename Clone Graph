@@ -1,0 +1,27 @@
+# Clone Graph - TC->O(V+E) - DFS dolution
+class Solution {
+public:
+    unordered_map<Node*, Node*> visited;
+
+    Node* cloneGraph(Node* node) {
+        if (!node) {
+            return nullptr;
+        }
+
+        // If the node was already cloned, return the cloned node.
+        if (visited.find(node) != visited.end()) {
+            return visited[node];
+        }
+
+        // Clone the node.
+        Node* clone = new Node(node->val);
+        visited[node] = clone;
+
+        // Iterate through the neighbors to clone them recursively.
+        for (Node* neighbor : node->neighbors) {
+            clone->neighbors.push_back(cloneGraph(neighbor));
+        }
+
+        return clone;
+    }
+};
