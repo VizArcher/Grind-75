@@ -1,0 +1,14 @@
+# My Solution - TC -> O(N)
+class Solution {
+public:
+    bool IsBSTutil(TreeNode* root, long minval, long maxval){
+        if(root == NULL) return true;
+        if(root -> val >= maxval || root -> val <= minval)
+            return false;
+        return IsBSTutil(root->left, minval, root->val) && IsBSTutil(root->right, root->val, maxval);
+    }
+
+    bool isValidBST(TreeNode* root) {
+        return IsBSTutil(root, LONG_MIN, LONG_MAX);
+    }
+};
