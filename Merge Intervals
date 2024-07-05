@@ -1,0 +1,40 @@
+// Merge intervals : TC -> O(nlogn) : SC -> O(n)
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        if (intervals.empty()) return {};
+
+        // Sort intervals based on the starting time
+        sort(intervals.begin(), intervals.end());
+
+        // Stack to hold merged intervals
+        stack<pair<int, int>> merge;
+        merge.push({intervals[0][0], intervals[0][1]});
+
+        for (int i = 1; i < intervals.size(); i++) {
+            int start = intervals[i][0];
+            int end = intervals[i][1];
+            int topStart = merge.top().first;
+            int topEnd = merge.top().second;
+
+            if (start <= topEnd) {
+                // Found overlap, merge them
+                merge.pop(); // Pop the top interval
+                merge.push({topStart, max(topEnd, end)}); // Push the merged interval
+            } else {
+                merge.push({start, end}); // No overlap, push the current interval
+            }
+        }
+
+        // Convert stack to result vector
+        vector<vector<int>> res;
+        while (!merge.empty()) {
+            res.push_back({merge.top().first, merge.top().second});
+            merge.pop();
+        }
+
+        // Reverse the result vector since the stack gives intervals in reverse order
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
