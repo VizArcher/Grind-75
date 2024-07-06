@@ -2,7 +2,7 @@
 class TimeMap {
 private:
     unordered_map<string, vector<pair<int, string>>> store;
-public:
+public: 
     TimeMap() {}
     
     void set(string key, string value, int timestamp) {
