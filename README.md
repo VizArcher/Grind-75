@@ -1,5 +1,4 @@
 # Grind-75
 
 Topic To Learn more clearly - 
-1. Disjoint Set - https://www.youtube.com/watch?v=aBxjDBC4M1U
-2.   Leetcode - https://leetcode.com/problems/accounts-merge/submissions/1312689804/
+1. Disjoint Set - https://www.youtube.com/watch?v=aBxjDBC4M1U and Leetcode - https://leetcode.com/problems/accounts-merge/submissions/1312689804/
