@@ -1,0 +1,36 @@
+// Word Search : BackTracking : TC -> O(m x n x 4^word length)
+class Solution {
+private:
+    bool backtrack(vector<vector<char>>& board, string& word, int row, int col, int index){
+        if(index == word.size())
+            return true;
+        
+        if(row < 0 || row >= board.size() || col < 0 || col >= board[0].size() || board[row][col] != word[index])
+            return false;
+
+        int temp = board[row][col]; // store value in temp
+        board[row][col] = ' '; // mark cell visited
+
+        bool found = backtrack(board, word, row + 1, col, index + 1) ||
+                     backtrack(board, word, row - 1, col, index + 1) ||
+                     backtrack(board, word, row, col + 1, index + 1) ||
+                     backtrack(board, word, row, col - 1, index + 1);
+        
+        board[row][col] = temp; // Restor cell
+
+        return found; 
+    }
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        int rows = board.size();
+        int cols = board[0].size();
+
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                if(board[i][j] == word[0] && backtrack(board, word, i, j, 0))
+                    return true;
+            }
+        }
+        return false;
+    }
+};
