@@ -4,7 +4,7 @@ public:
     string minWindow(string s, string t) {
         if(s.empty() || t.empty()) return "";
 
-        // Array to keep the count of characters in t
+        // Array to keep the count of characters in t 
         int hash[256] = {0};
         for(char c : t){
             hash[c]++;
