@@ -1,0 +1,46 @@
+// Maximum Profit in Job Scheduling : TC -> O(nlogn) : SC -> O(n)
+class Solution {
+public:
+    int jobScheduling(vector<int>& startTime, vector<int>& endTime, vector<int>& profit) {
+        int n = startTime.size();
+        vector<vector<int>> jobs(n);
+
+        // Combine the three arrays into one array off jobs
+        for(int i = 0; i < n; i++){
+            jobs[i] = {endTime[i], startTime[i], profit[i]};
+        }
+
+        // Sort jobs by their end times
+        sort(jobs.begin(), jobs.end());
+
+        // DP array to store the maximum profit up to the i-th job
+        vector<int> dp(n, 0);
+        dp[0] = jobs[0][2]; // Base Case: only first job's profit is considered
+
+        for(int i = 1; i < n; i++){
+            // profit if we include the current job
+            int includeProfit = jobs[i][2];
+            int lastNonConflicting = -1;
+
+            // Binary search to find the last non-conflicting job
+            int low = 0, high = i - 1;
+            while(low <= high){
+                int mid = (low + high) / 2;
+                if(jobs[mid][0] <= jobs[i][1]){
+                    lastNonConflicting = mid;
+                    low = mid + 1;
+                }else{
+                    high = mid - 1;
+                }
+            }
+
+            if(lastNonConflicting != -1){
+                includeProfit += dp[lastNonConflicting];
+            }
+
+            // Take the maximum of including or not including the current job
+            dp[i] = max(dp[i - 1], includeProfit);
+        }
+        return dp[n - 1];
+    }
+};
