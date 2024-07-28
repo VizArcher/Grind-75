@@ -1,0 +1,37 @@
+// Roman to Integer : TC -> O(N) + O(N) : SC -> O(2N)
+class Solution {
+public:
+    int romanToInt(string s) {
+        int n = s.size();
+        int ans = 0;
+        unordered_map<char, int> mpp = {{'I', 1}, {'V', 5}, {'X', 10}, {'L', 50}, {'C', 100}, {'D', 500}, {'M', 1000}};
+        stack<char> roman;
+
+        // Push characters into the stack
+        for(int i = 0; i < n; i++){
+            roman.push(s[i]);
+        }
+
+        // Process the characters in reverse order
+        while(!roman.empty()){
+            char num = roman.top();
+            roman.pop();
+            ans += mpp[num];
+
+            // Check and handle subtraction cases
+            if(!roman.empty()) {
+                if ((num == 'V' || num == 'X') && roman.top() == 'I') {
+                    ans -= 1;
+                    roman.pop();
+                } else if ((num == 'L' || num == 'C') && roman.top() == 'X') {
+                    ans -= 10;
+                    roman.pop();
+                } else if ((num == 'D' || num == 'M') && roman.top() == 'C') {
+                    ans -= 100;
+                    roman.pop();
+                }
+            }
+        }
+        return ans;
+    }
+};
