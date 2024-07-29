@@ -1,0 +1,87 @@
+// Backspace String Compare : My soln :
+class Solution {
+public:
+    bool backspaceCompare(string s, string t) {
+        stack<char> st1;
+        stack<char> st2;
+        string ans1;
+        string ans2;
+
+        for(auto it: s){
+            st1.push(it);
+        }
+
+        for(auto it: t){
+            st2.push(it);
+        }
+
+        while(!st1.empty()){
+            char chr = st1.top();
+            st1.pop();
+
+            if(chr == '#') {
+                st1.pop();
+                chr = st1.top();
+            }
+            else
+                ans1.push_back(chr);
+        }
+
+        while(!st2.empty()){
+            char chr = st2.top();
+            st2.pop();
+
+            if(chr == '#') {
+                st2.pop();
+                chr = st2.top();
+            }
+            else
+                ans2.push_back(chr);
+        }
+
+        if(ans1 == ans2)
+            return true;
+        
+        return false;
+
+    }
+};
+
+// Corrected soln - 
+
+class Solution {
+public:
+    stack<char> check(stack<char>st,string s){
+        for(int i=0;i<s.size();i++){
+            if(s[i]!='#'){
+                st.push(s[i]);
+            }
+            else{
+                if(!st.empty() ){
+                    st.pop();
+                }
+            }
+        }
+        return st;
+    }
+    bool backspaceCompare(string s, string t) {
+        stack<char>st;
+        stack<char>p =check(st,s);
+        stack<char>q =check(st,t);
+        
+        if(p.size()!=q.size()){
+            return false;
+        }
+        else{
+            while(!p.empty() && !q.empty()){
+                if(p.top()!=q.top()){
+                    return false;
+                }
+                p.pop();
+                q.pop();
+            }
+        }
+        return true;
+        
+    }
+};
