@@ -1,0 +1,21 @@
+// Longest Common Prefix : TC -> O(S) i.e number of all characters : SC -> O(1)
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        if(strs.empty()) return "";
+
+        // Initialize the prefix with the first srtring
+        string prefix = strs[0];
+
+        // Iterate over the remaining strings
+        for(int i = 1; i < strs.size(); i++){
+            // Compare the prefix with current string
+            while(strs[i].find(prefix) != 0){
+                // Reduce the prefix by one character from the end
+                prefix = prefix.substr(0, prefix.size() - 1);
+                if(orefix.empty()) return "";
+            }
+        }
+        return prefix
+    }
+};
