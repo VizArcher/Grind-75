@@ -1,0 +1,39 @@
+// Movve Zeroes : Earlier soln : TC -> O(n^2)
+class Solution {
+public:
+    void moveZeroes(vector<int>& a) {
+        int j = a.size() - 1 ;
+        int begin = 0 ;
+
+        while(j != 0 && begin < j){
+            if(a[begin] == 0){
+                for(int k = begin ; k < j ; k++){
+                    swap(a[k], a[k+1]);
+                }
+                j-- ;
+            }
+            else{
+                begin++ ;
+            }
+        }
+    }
+};
+
+// Replace elements instead of swapping : TC -> O(n) : SC -> O(1)
+class Solution {
+public:
+    void moveZeroes(vector<int>& a) {
+        int n = a.size();
+        int index = 0;
+
+        for(int i = 0; i < n; i++) {
+            if(a[i] != 0) {
+                a[index++] = a[i];
+            }
+        }
+
+        while(index < n) {
+            a[index++] = 0;
+        }
+    }
+};
