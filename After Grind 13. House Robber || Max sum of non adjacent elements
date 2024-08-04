@@ -5,7 +5,7 @@ private:
         if (ind == 0) return nums[ind];
         if (ind < 0) return 0;
 
-        int pick = nums[ind] + f(ind - 2, nums);
+        int pick = nums[ind] + f(ind - 2, nums); 
         int notPick = 0 + f(ind - 1, nums);
 
         return max(pick, notPick);
