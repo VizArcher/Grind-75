@@ -1,0 +1,48 @@
+// Remove Nth Node From End of List : My solution : TC -> O(n) : SC -> O(1)
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode *current, *prev, *next;
+        current = head;
+        prev = NULL;
+
+        // Reversing the linked list
+        while(current != NULL){
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        head = prev;
+
+        // Deleting node
+        ListNode* node = head;
+
+        if (n == 1) {
+            head = node->next;
+        } else {
+            for (int i = 0; i < n - 2; i++){
+                node = node->next;
+        }
+
+            ListNode* temp = node->next;
+            node->next = temp->next;
+            delete temp; 
+        }
+
+        // Returning list to its original state
+        current = head;
+        prev = NULL;
+
+        // Reversing the linked list
+        while(current != NULL){
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        head = prev;
+
+        return head;
+    }
+};
