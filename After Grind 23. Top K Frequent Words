@@ -1,0 +1,43 @@
+// Top K Frequent Words : Using priority queue and custom operator : TC -> O(nlogk) : SC -> O(n+k)
+class Solution {
+public:
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        unordered_map<string, int> freqMap;
+
+        // Count frequency of each word
+        for (auto& word : words) {
+            freqMap[word]++;
+        }
+
+        // Custom comparator for the priority queue
+        auto compare = [](pair<int, string>& a, pair<int, string>& b) {
+            if (a.first == b.first) {
+                return a.second < b.second; // If frequencies are the same, compare lexicographically
+            }
+            return a.first > b.first; // otherwise, compare by frequency
+        };
+
+        // Min-heap (priority queue)
+        priority_queue<pair<int, string>, vector<pair<int, string>>, decltype(compare)> pq(compare);
+
+        // Add elements to the heap 
+        for (auto& it : freqMap) {
+            pq.push({it.second, it.first});
+            if (pq.size() > k) {
+                pq.pop(); // Maintain the size of the heap to be k
+            }
+        }
+
+        // Extract elements from the heap
+        vector<string> result;
+        while (!pq.empty()) {
+            result.push_back(pq.top().second);
+            pq.pop();
+        }
+
+        // The heap returns the elements in reverse order, so reverse the result
+        reverse(result.begin(), result.end());
+
+        return result;
+    }
+};
