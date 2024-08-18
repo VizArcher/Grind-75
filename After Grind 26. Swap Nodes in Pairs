@@ -1,0 +1,39 @@
+// Swap Nodes in Pairs : TC->O(n) : SC->O(1)
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        if (!head || !head->next) return head;  // If list has 0 or 1 nodes, no swap needed
+
+        ListNode* dummy = new ListNode(0);  // Create a dummy node to ease the process
+        dummy->next = head;
+        ListNode* prev = dummy;
+        ListNode* curr = head;
+
+        while (curr && curr->next) {
+            ListNode* first = curr;
+            ListNode* second = curr->next;
+
+            // Swapping nodes
+            prev->next = second;
+            first->next = second->next;
+            second->next = first;
+
+            // Move pointers forward
+            prev = first;
+            curr = first->next;
+        }
+
+        return dummy->next;
+    }
+};
