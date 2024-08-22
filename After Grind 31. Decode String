@@ -1,0 +1,68 @@
+// Decode String : My Weird full of error approach LOL 
+class Solution {
+public:
+    string decodeString(string s) {
+        string ans;
+
+        for(int index = 0; index < s.size(); index++) {
+            int iterator;
+            if(s[index] >= '0' && s[index] <= '9') 
+                iterator = s[index] - '0';
+            
+            if(s[index] == '[') {
+                while(iterator != 0) {
+                    index++;
+                    while(s[index] != ']') {
+                        ans.push_back(s[index]);
+                        index++;
+                    }
+                    iterator--;
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+// TC -> O(n) : SC -> O(n)
+class Solution {
+public:
+    string decodeString(string s) {
+        stack<int> countStack;
+        stack<string> stringStack;
+        string currentString = "";
+        int k = 0;
+
+        for(int i = 0; i < s.size(); i++) {
+            if (isdigit(s[i])) {
+                // Building the multiplier number (k)
+                k = k * 10 + (s[i] - '0');
+            } else if (s[i] == '[') {
+                // Push the current number and current string onto their respective stacks
+                countStack.push(k);
+                stringStack.push(currentString);
+                // Reset for the next encoded part
+                k = 0;
+                currentString = "";
+            } else if (s[i] == ']') {
+                // pop the number and string from the stack
+                int repeatTimes = countStack.top();
+                countStack.pop();
+                string decodedString = stringStack.top();
+                stringStack.pop();
+
+                // Repeat the current string and append it to the decoded string
+                for (int j = 0; j < repeatTimes; j++) {
+                    decodedString += currentString;
+                }
+
+                // Set currentString to the new decoded string
+                currentString = decodedString;
+            } else {
+                // Regular character, add to currentString
+                currentString += s[i];
+            }
+        }
+        return currentString;
+    }
+};
