@@ -1,0 +1,27 @@
+// Contiguous Array : TC -> O(n) : SC -> O(n)
+class Solution {
+public:
+    int findMaxLength(vector<int>& nums) {
+        unordered_map<int, int> sumIndexMap;  // Map to store the first occurrence of each sum
+        int maxLength = 0;  // Initialize max length of the subarray
+        int sum = 0;  // Cumulative sum
+        
+        // Initialize the map with sum 0 at index -1 to handle subarrays starting from index 0
+        sumIndexMap[0] = -1;
+        
+        for (int i = 0; i < nums.size(); i++) {
+            // Convert 0s to -1s
+            sum += (nums[i] == 1) ? 1 : -1;
+            
+            // If the sum has been seen before, calculate the length of the subarray
+            if (sumIndexMap.find(sum) != sumIndexMap.end()) {
+                maxLength = max(maxLength, i - sumIndexMap[sum]);
+            } else {
+                // Otherwise, store the first occurrence of this sum
+                sumIndexMap[sum] = i;
+            }
+        }
+        
+        return maxLength;
+    }
+};
