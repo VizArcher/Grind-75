@@ -1,0 +1,22 @@
+// Find K Closest Elements : TC -> O(logn + k) : SC -> O(k)
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        int left = 0, right = arr.size() - k;
+
+        // Binary search to find the starting point
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            // Check which side is closer
+            if (x - arr[mid] > arr[mid + k] - x)
+                left = mid + 1;
+            else
+                right = mid;
+        }
+
+        // Collect the k elements starting from the found position
+        vector<int> result(arr.begin() + left, arr.begin() + left + k);
+        return result;
+    }
+};
