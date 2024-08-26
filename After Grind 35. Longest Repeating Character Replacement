@@ -1,0 +1,26 @@
+// Longest Repeating Character Replacement : TC -> O(n) : SC -> O(1)
+class Solution {
+public:
+    int characterReplacement(string s, int k) {
+        int maxLength = 0;;
+        int maxCount = 0;
+        int left = 0;
+        int charCount[26] = {0};
+
+        for (int right = 0; right < s.length(); right++) {
+            // Increment the count of the current character
+            maxCount = max(maxCount, ++charCount[s[right] - 'A']);
+
+            // Check if the window is valid
+            while ((right - left + 1) - maxCount > k) {
+                // Decrement the count of the leftmost character and shrink the window
+                charCount[s[left] - 'A']--;
+                left++;
+            }
+
+            // Update the maximum length found
+            maxLength = max(maxLength, right - left + 1);
+        }
+        return maxLength;
+    }
+};
