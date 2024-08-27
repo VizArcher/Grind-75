@@ -1,0 +1,19 @@
+// Greedy approach : TC -> O(n) : SC -> O(1)
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int maxReach = 0; // maximum index we can reach
+
+        for (int i = 0; i < nums.size(); i++) {
+            if (i > maxReach) {
+                // If the current index is greater than maxReach, we can't proceed further
+                return false;
+            }
+
+            // Update the maximum reachable index
+            maxReach = max(maxReach, i + nums[i]);
+        }
+
+        return true;
+    }
+};
