@@ -1,0 +1,91 @@
+// Sort List : TC -> O(nlogn) : SC -> O(n)
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        vector<int> dummyList;
+        ListNode* current = head;
+
+        if (head == nullptr || head->next == nullptr) {
+            return head;
+        }
+
+        while(current != nullptr) {
+            dummyList.push_back(current->val);
+            current = current->next;
+        }
+
+        sort(dummyList.begin(), dummyList.end());
+        current = head;
+        
+        for (int i = 0; i < dummyList.size(); i++) {
+            current->val = dummyList[i];
+            current = current->next;
+        }
+
+        return head;
+    }
+};
+
+// Using Merge Sort : TC -> O(nlogn) : SC -> O(logn)
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        // Base case: if the list is empty or has one element, it's already sorted
+        if (!head || !head->next) {
+            return head;
+        }
+
+        // Step 1: split the list into two halves
+        ListNode* mid = getMid(head);
+        ListNode* left = head;
+        ListNode* right = mid->next;
+        mid->next = nullptr; // split the list into two halves
+
+        // step 2: Recursively sort both halves
+        left = sortList(left);
+        right = sortList(right);
+
+        // step 3: Merge the two sorted halves
+        return merge(left, right);
+    }
+
+private:
+    // Function to find the middle of list
+    ListNode* getMid(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head->next;
+
+        while(fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        return slow;
+    }
+
+    // Function to merge two sorted linked lists
+    ListNode* merge(ListNode* left, ListNode* right) {
+        ListNode dummy(0);
+        ListNode* current = &dummy;
+
+        while (left && right) {
+            if (left->val < right->val) {
+                current->next = left;
+                left = left->next;
+            } else {
+                current->next = right;
+                right = right->next;
+            }
+            current = current->next;
+        }
+
+        // Attach the remaining elements, if any
+        if (left) {
+            current->next = left;
+        } else {
+            current->next = right;
+        }
+
+        return dummy.next;
+    }
+};
