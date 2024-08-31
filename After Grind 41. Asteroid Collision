@@ -1,0 +1,34 @@
+// Asteroid Collision : stack : TC -> O(n) : SC -> O(n)
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+        stack<int> st;
+
+        for (int asteroid : asteroids) {
+            bool exploded = false;
+            // Process collision only when there's a rightward asteriod in stack and leftward asteroid incoming
+            while (!st.empty() && st.top() > 0 && asteroid < 0) {
+                if (abs(st.top()) < abs(asteroid)) {
+                    st.pop(); // Smaller positive asteroid explodes
+                } else if (abs(st.top()) == abs(asteroid)) {
+                    st.pop(); // Both explode;
+                    exploded = true; // Mark that asteroid was exploded
+                    break;
+                } else {
+                    exploded = true; // Current asteroid exploded
+                    break;
+                }
+            }
+            if (!exploded) {
+                st.push(asteroid); // Push current asteroid if it didn't exlode
+            }
+        }
+
+        vector<int> result(st.size());
+        for (int i = st.size() - 1; i >= 0; i--) {
+            result[i] = st.top();
+            st.pop();
+        }
+        return result;
+    }
+};
