@@ -1,0 +1,23 @@
+// Random Pick with Weight : Prefixsum and binary search : TC -> O(n) + O(logn) : SC -> O(n)
+class Solution {
+public:
+    vector<int> prefixSums;
+    int totalSum;
+
+    Solution(vector<int>& w) {
+        // Construct prefix sum array
+        prefixSums = vector<int>(w.size());
+        prefixSums[0] = w[0];
+        for (int i = 1; i < w.size(); ++i) {
+            prefixSums[i] = prefixSums[i-1] + w[i];
+        }
+        totalSum = prefixSums.back(); // Total sum is the last value in the prefix sums array
+    }
+    
+    int pickIndex() {
+        // Generate a random number between 1 and totalSum (inclusive)
+        int target = rand() % totalSum + 1;
+        // Binary search to find the target in the prefix sums array
+        return lower_bound(prefixSums.begin(), prefixSums.end(), target) - prefixSums.begin();
+    }
+};
