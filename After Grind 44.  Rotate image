@@ -1,0 +1,36 @@
+// Rotate Image : My approach : TC -> O(n^2) : SC -> O(m x n)
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+        vector<vector<int>> ninetyDegreeRotated (cols, vector<int>(rows, 0)); 
+
+        for (int col = 0; col < cols; col++) {
+            for (int row = rows - 1; row >= 0; row--) {
+                ninetyDegreeRotated[col][rows - 1 - row] = matrix[row][col];
+            }
+        }
+        matrix = ninetyDegreeRotated;                                      
+    }
+};
+
+// Optimial : TC -> O(n^2) : SC -> O(1)
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        
+        // Step 1: Transpose the matrix
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                swap(matrix[i][j], matrix[j][i]);
+            }
+        }
+        
+        // Step 2: Reverse each row
+        for (int i = 0; i < n; ++i) {
+            reverse(matrix[i].begin(), matrix[i].end());
+        }
+    }
+};
