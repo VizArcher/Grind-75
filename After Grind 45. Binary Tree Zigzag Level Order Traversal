@@ -1,0 +1,38 @@
+// Binary Tree Zigzag Level Order Traversal : TC -> O(n) : SC -> O(n)
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> result;
+        if (!root) return result;
+        
+        queue<TreeNode*> q;
+        q.push(root);
+        bool leftToRight = true;
+        
+        while (!q.empty()) {
+            int levelSize = q.size();
+            vector<int> currentLevel(levelSize);
+            
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode* node = q.front();
+                q.pop();
+                
+                // Find the position to fill in the current level
+                int index = leftToRight ? i : (levelSize - 1 - i);
+                currentLevel[index] = node->val;
+                
+                // Push children into the queue
+                if (node->left) q.push(node->left);
+                if (node->right) q.push(node->right);
+            }
+            
+            // After processing the level, flip the direction
+            leftToRight = !leftToRight;
+            
+            // Add the current level to the result
+            result.push_back(currentLevel);
+        }
+        
+        return result;
+    }
+};
