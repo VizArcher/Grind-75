@@ -1,0 +1,32 @@
+// Path Sum III : DFS and use prefixsum with count and then backtrack : TC -> O(n) : SC -> O(n)
+class Solution {
+public:
+    int pathSum(TreeNode* root, int targetSum) {
+        unordered_map<long long, int> prefixSumMap;
+        prefixSumMap[0] = 1; // Base case: a prefix sum of 0 has one occurence
+        return dfs(root, 0, targetSum, prefixSumMap);
+    }
+
+private:
+    int dfs (TreeNode* node, long long currentSum, int targetSum, unordered_map<long long, int>& prefixSumMap) {
+        if (!node) return 0;
+
+        currentSum += node->val;
+
+        // Number of times the (currentSum - targetSum) has appeared indicates
+        // the number of paths that sum to targetSum up to this point
+        int numPaths = prefixSumMap[currentSum - targetSum];
+
+        // Add the currentSum to the map
+        prefixSumMap[currentSum]++;
+
+        // Recur for left and right subtrees
+        numPaths += dfs(node->left, currentSum, targetSum, prefixSumMap);
+        numPaths += dfs(node->right, currentSum, targetSum, prefixSumMap);
+
+        // Backtrack: Remove the current sum from the map
+        prefixSumMap[currentSum]--;
+
+        return numPaths;
+    }
+};
