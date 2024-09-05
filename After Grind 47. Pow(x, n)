@@ -1,0 +1,55 @@
+// Pow(x, n) : TC -> O(n) : SC -> O(1) : TLE
+class Solution {
+public:
+    double myPow(double x, int n) {
+        double answer;
+        double sign;
+        int power = abs(n);
+        
+        if (n == 0 || x == 1) return 1;
+    
+        if (n > 0) {
+            while (n > 0) {
+                answer *= x;
+                n--;
+            }
+        }
+        else {
+            while (n < 0) {
+                answer /= x;
+                n++;
+            }
+        }
+    
+        return answer;
+    }
+};
+
+// recursion : TC -> O(logn) : SC -> O(1)
+class Solution {
+public:
+    double myPow(double x, int n) {
+        // Handle the case of INT_MIN specifically
+        if (n == INT_MIN) {
+            // We need to handle this because -INT_MIN causes an overflow
+            x = 1 / x;
+            n = INT_MAX;  // Use INT_MAX
+            return myPow(x, n) * x;  // Multiply once more since we divided earlier
+        }
+        
+        // Base case
+        if (n == 0) return 1;
+        if (n < 0) {
+            x = 1 / x; // If n is negative, inverse x
+            n = -n; // Use positive n 
+        }
+
+        // Recursive call using exponentiation by squaring
+        double half = myPow(x, n / 2);
+        if (n % 2 == 0) {
+            return half * half;
+        } else {
+            return half * half * x;
+        }
+    }
+};
