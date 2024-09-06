@@ -1,0 +1,29 @@
+// Largest Number : TC -> O(nlogn) : SC -> O(n)
+class Solution {
+public:
+    string largestNumber(vector<int>& nums) {
+        // Convert integers to strings for comparison
+        vector<string> numStrs;
+        for (int num : nums) {
+            numStrs.push_back(to_string(num));
+        }
+
+        // Custom comparator to sort based on which combination is larger
+        sort(numStrs.begin(), numStrs.end(), [](string &a, string &b) {
+            return a + b > b + a;
+        });
+
+        // Handle the case where the largest number is '0 (e.g nums = [0, 0])
+        if (numStrs[0] == "0") {
+            return "0";
+        }
+
+        // Concatenate the sorted array to form the largest number
+        string result;
+        for (string &s : numStrs) {
+            result += s;
+        }
+
+        return result;
+    }
+};
