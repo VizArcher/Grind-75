@@ -1,0 +1,22 @@
+// Linked List in Binary Tree : TC -> O(N x M) : SC -> O(M)
+class Solution {
+public:
+    bool isSubPath(ListNode* head, TreeNode* root) {
+        if (!root) return false;
+        // Check if the linked list matches starting from the current node
+        // or in the left or right subtrees
+        return dfs(root, head) || isSubPath(head, root->left) || isSubPath(head, root->right);
+    }
+
+private:
+    // Helper function to check if there's a path in the tree starting from node 'root
+    // that matches the linked list starting from node 'head
+    bool dfs(TreeNode* root, ListNode* head) {
+        if (!head) return true; // All nodes in the linked list have been matched
+        if (!root) return false; // Reached a leaf in the tree without matching all linked list nodes
+        if (root->val != head->val) return false; // values don't match
+
+        // Proceed to check the left and right subtrees
+        return dfs(root->left, head->next) || dfs(root->right, head->next);
+    }
+};
