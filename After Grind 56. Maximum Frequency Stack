@@ -1,0 +1,41 @@
+// Maximum Frequency Stack : TC -> O(1) : SC -> O(N)
+class FreqStack {
+public:
+    unordered_map<int, int> freq; // Map to track frequency of elements
+    unordered_map<int, stack<int>> group; // Map to track groups of frequencies
+    int maxFreq = 0;
+
+    FreqStack() {
+        
+    }
+    
+    void push(int val) {
+        // Increase the frequency of val
+        freq[val]++;
+
+        // If this is the new max frequency, update maxFreq
+        if (freq[val] > maxFreq) {
+            maxFreq = freq[val];
+        }
+
+        // Add the element to the corresponding frequency group stack
+        group[freq[val]].push(val);
+    }
+    
+    int pop() {
+        // Get the element with highest frequency
+        int val = group[maxFreq].top();
+        group[maxFreq].pop();
+
+        // Decrease the frequency of the element 
+        freq[val]--;
+
+        // If there are no more elements at the current maxFreq, decrement maxFreq
+        if (group[maxFreq].empty()) {
+            maxFreq--;
+        }   
+
+        // return the most frequent element
+        return val;
+    }
+};
