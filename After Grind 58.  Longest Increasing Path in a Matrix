@@ -1,0 +1,50 @@
+// Longest Increasing Path in a Matrix : DFS and memorization : TC -> O(m.n) : SC -> O(m.n)
+class Solution {
+public:
+    int rows, cols;
+    vector<vector<int>> dp;
+    vector<vector<int>> directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    // Perform DFS from the current cell (i ,j)
+    int dfs(vector<vector<int>>& matrix, int i, int j) {
+        // If the result for this cell is already computed, return it
+        if (dp[i][j] != -1) return dp[i][j];
+
+        int maxPath = 1; // The minimum path length is 1 (the cell itself)
+
+        // Explore all four directions
+        for (auto& dir : directions) {
+            int newRow = i + dir[0];
+            int newCol = j + dir[1];
+
+            // Check if the new position is valid and if it forms an incresing path 
+            if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols
+                && matrix[newRow][newCol] > matrix[i][j]) {
+                    maxPath = max(maxPath, 1 + dfs(matrix, newRow, newCol));
+            }
+        }
+
+        // Store the result in dp array
+        dp[i][j] = maxPath;
+        return dp[i][j];
+    }
+
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        if (matrix.empty()) return 0;
+
+        rows = matrix.size();
+        cols = matrix[0].size();
+        dp = vector<vector<int>>(rows, vector<int>(cols, -1)); // Initialize DP table
+
+        int longestPath = 0;
+
+        // Iterate over every cell in the matrix
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // Compute the longest path starting from cell (i, j)
+                longestPath = max(longestPath, dfs(matrix, i, j));
+            }
+        }
+        return longestPath;
+    }
+};
