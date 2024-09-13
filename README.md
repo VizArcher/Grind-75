@@ -8,3 +8,5 @@ Topic To Learn more clearly -
 5. Check LIS - very important - after grind 24
 
 Completed - Grind-75 (27 - 07 - 2024)
+Completed - After Grind - 146 (13 - 09 - 2024)
+Next Target - neetcode 150 
