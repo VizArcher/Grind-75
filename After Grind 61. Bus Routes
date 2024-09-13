@@ -1,0 +1,48 @@
+// Bus Routes : Construct graph and then do BFS : TC -> O(n * m), where n is the number of bus routes and m is the average number of stops per route : SC -> O(n * m)
+class Solution {
+public:
+    int numBusesToDestination(vector<vector<int>>& routes, int source, int target) {
+        if (source == target) return 0;
+
+        unordered_map<int, vector<int>> stop_to_routes; // Map each stop to the list of buses covering that stop
+        int n = routes.size();
+
+        // Map each stop to the buses that cover it
+        for (int i = 0; i < n; i++) {
+            for (int stop : routes[i]) {
+                stop_to_routes[stop].push_back(i);
+            }
+        }
+
+        // BFS initialization
+        queue<pair<int, int>> q; // (current stop, number of buses taken)
+        unordered_set<int> visited_stops; // to mark visited stops
+        unordered_set<int> visited_routes; // to mark visited routes
+
+        // Start BFS from the source stop 
+        q.push({source, 0});
+        visited_stops.insert(source);
+
+        while (!q.empty()) {
+            auto [current_stop, buses_taken] = q.front();
+            q.pop();
+
+            // Check all buses that pass through the current stop
+            for (int route : stop_to_routes[current_stop]) {
+                if (visited_routes.count(route)) continue; // Skip visited routes
+                visited_routes.insert(route);
+
+                // Check all the stops covered by the current bus route
+                for (int next_stop : routes[route]) {
+                    if (next_stop == target) return buses_taken + 1 ; // If target is reachable
+                    if(!visited_stops.count(next_stop)) {
+                        visited_stops.insert(next_stop);
+                        q.push({next_stop, buses_taken + 1}); // Move to the next stop
+                    }
+                }
+            }
+        }
+
+        return -1; // If destination is unreachable
+    }
+};
