@@ -1,0 +1,70 @@
+// Word Search II : TC -> Trie Construction: O(W * L), where W is the number of words and L is the average length of the words + DFS: O(m * n * 4^L), where m and n are the dimensions of the board, and L is the maximum length of the word to be searched.
+// SC -> Trie Storage: O(W * L), where W is the number of words and L is the average length. + DFS Stack: O(L), where L is the length of the longest word due to recursion depth. +The board's size is O(m * n), and an auxiliary data structure is used for marking visited cells during DFS.
+
+class TrieNode {
+public:
+    TrieNode* children[26] = {nullptr};
+    string word = "";
+};
+
+class Solution {
+public:
+    vector<string> result;
+    int rows, cols;
+
+    // Helper function to insert words into the trie
+    void insertWord(TrieNode* root, string word) {
+        TrieNode* node = root;
+        for (char c : word) {
+            int index = c - 'a';
+            if (!node->children[index]) {
+                node->children[index] = new TrieNode();
+            }
+            node = node->children[index];
+        }
+        node->word = word; // store the word at the end node
+    }
+
+    // DFS function to explore the board
+    void dfs(vector<vector<char>>& board, int i, int j, TrieNode* node) {
+        char c = board[i][j];
+        if (c == '#' || !node->children[c - 'a']) return;
+
+        node = node->children[c - 'a'];
+        if (node->word != "") {
+            result.push_back(node->word);
+            node->word = ""; // Avoid duplicate entries
+        }
+
+        board[i][j] = '#'; // Mark the cell as visited
+
+        // Explore all 4 directions
+        if (i > 0) dfs(board, i-1, j, node); // up
+        if (i < rows - 1) dfs(board, i+1, j, node); // down
+        if (j > 0) dfs(board, i, j-1, node); // left
+        if (j < cols - 1) dfs(board, i, j+1, node); // right
+
+        board[i][j] = c; // unmark the cell after visiting
+    }
+
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        TrieNode* root = new TrieNode();
+
+        // Insert all words into the trie
+        for (string word : words) {
+            insertWord(root, word);
+        }
+
+        rows = board.size();
+        cols = board[0].size();
+
+        // Start DFS from each cell in the board 
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                dfs(board, i, j, root);
+            }
+        }
+
+        return result;
+    }
+};
