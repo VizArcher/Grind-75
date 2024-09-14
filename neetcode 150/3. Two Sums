@@ -1,0 +1,42 @@
+// Two Sums : Brute Force : TC -> O(n^2) : SC -> O(1)
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        int n = nums.size();
+        vector<int> answer;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (nums[i] + nums[j] == target) {
+                    answer.push_back(i);
+                    answer.push_back(j);
+                    return answer;
+                }
+            }
+        }
+        return answer;
+    }
+};
+
+// Hash map : TC -> O(N) : SC -> O(N)
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> numMap;
+        int n = nums.size();
+
+        // Build the hash table
+        for (int i = 0; i < n; i++) {
+            numMap[nums[i]] = i ;
+        }
+
+        // Find the complement
+        for (int i = 0; i < n; i++) {
+            int complement = target - nums[i];
+            if (numMap.count(complement) && numMap[complement] != i) {
+                return {i, numMap[complement]};
+            }
+        }
+        return {};
+    }
+};
