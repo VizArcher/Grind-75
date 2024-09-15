@@ -1,0 +1,20 @@
+// Group Anagrams : TC -> O(n x m x logm) where n is the number of strings in strs and m is the maximum length of a string : SC -> O(n x m)
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> anagramGroup;
+        vector<vector<string>> result;
+
+        for (auto st : strs) {
+            string sortedSt = st;
+            sort(sortedSt.begin(), sortedSt.end());
+            anagramGroup[sortedSt].push_back(st);
+        }
+
+        for (auto it : anagramGroup) {
+            result.push_back(it.second);
+        }
+        
+        return result;
+    }
+};
