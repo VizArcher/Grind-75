@@ -1,0 +1,29 @@
+// Minimum Time Difference : TC -> O(n logn) : SC -> O(n)
+class Solution {
+public:
+    int findMinDifference(vector<string>& timePoints) {
+        vector<int> minutes;
+
+        // convert all time points to minutes
+        for (const string& time : timePoints) {
+            int hours = stoi(time.substr(0, 2));
+            int mins = stoi(time.substr(3, 2));
+            minutes.push_back(hours * 60 + mins);
+        }
+
+        // Sort the time points by minutes
+        sort(minutes.begin(), minutes.end());
+
+        // Find the minimum difference
+        int minDiff = INT_MAX;
+        for (int i = 1; i < minutes.size(); i++) {
+            minDiff = min(minDiff, minutes[i] - minutes[i - 1]);
+        }
+
+        // Handle the circular difference (23:59 to 00:00)
+        int circularDiff = 1440 + minutes[0] - minutes.back(); // 1440 = 24*60
+        minDiff = min(minDiff, circularDiff);
+
+        return minDiff;
+    }
+};
