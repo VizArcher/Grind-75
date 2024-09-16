@@ -1,0 +1,27 @@
+// Top K Frequent Elements : we use a hash map which is then converted to a max heap :
+// TC -> O(n + m logm) : SC -> O(m) : Where n is number of elements in nums and m is the number of unique elements 
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // Count the frequency of each element using a hash map
+        unordered_map<int, int> numFreq;
+        for (auto num : nums) {
+            numFreq[num]++;
+        }  
+
+        // Use a max heap (priority_queue) to sort by frequency
+        priority_queue<pair<int, int>> maxHeap;
+        for (auto& freq : numFreq) {
+            maxHeap.push({freq.second, freq.first}); // {frequency, element}
+        }
+
+        // Extract the top k frequent elements
+        vector<int> result;
+        for (int i = 0; i < k; i++) {
+            result.push_back(maxHeap.top().second);
+            maxHeap.pop();
+        }
+
+        return result;
+    }
+};
