@@ -1,4 +1,4 @@
-// Generate Parentheses : TC -> O(4^n / √n) : SC -> O(4^n / √n)
+// Generate Parentheses : backtracking : TC -> O(4^n / √n) : SC -> O(4^n / √n)
 class Solution {
 public:
     vector<string> result; // Store all valid combinations
