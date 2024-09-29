@@ -1,0 +1,27 @@
+// Generate Parentheses : TC -> O(4^n / √n) : SC -> O(4^n / √n)
+class Solution {
+public:
+    vector<string> result; // Store all valid combinations
+
+    void backtrack(string current, int open, int close, int n) {
+        // If the current string has n pairs of parentheses, add to result
+        if (current.length() == n * 2) {
+            result.push_back(current);
+            return;
+        }
+
+        // If we can add an open parenthesis, do it
+        if (open < n) {
+            backtrack(current + "(", open + 1, close, n);
+        }
+
+        // If we can add a close parenthesis, do it
+        if (close < open) {
+            backtrack(current + ")", open, close + 1, n);
+        }
+    }
+    vector<string> generateParenthesis(int n) {
+        backtrack("", 0, 0, n); // Start the recursion with an empty string
+        return result;
+    }
+};
