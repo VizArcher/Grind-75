@@ -1,0 +1,109 @@
+// All O`one Data Structure : TC -> O(1) : SC -> O(n)
+class AllOne {
+    struct Node {
+        int count;
+        unordered_set<string> keys;
+        Node *prev, *next;
+        Node(int c) : count(c), prev(nullptr), next(nullptr) {}
+    };
+
+    Node* head; // Dummy head of the doubly linked list (DLL)
+    Node* tail; // Dummy tail of the doubly linked list (DLL)
+    unordered_map<string, int> keyCount; // Key -> count
+    unordered_map<int, Node*> countNode; // Count -> Node in DLL
+
+public:
+    AllOne() {
+        head = new Node(0);
+        tail = new Node(0);
+        head->next = tail;
+        tail->prev = head;    
+    }
+    
+    // Helper function to insert a new node with a given count after a given node
+    void insertNode(Node* prevNode, Node* newNode) {
+        newNode->next = prevNode->next;
+        newNode->prev = prevNode;
+        prevNode->next->prev = newNode;
+        prevNode->next = newNode;
+    }
+
+    // Helper function to remove a node from the DLL
+    void removeNode(Node* node) {
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
+        countNode.erase(node->count);
+        delete node;
+    }
+
+    void inc(string key) {
+        int currCount = keyCount[key];
+        int newCount = currCount + 1;
+        keyCount[key] = newCount;
+
+        Node* currNode = currCount ? countNode[currCount] : nullptr;
+        Node* newNode = countNode[newCount];
+
+        if (!newNode) {
+            newNode = new Node(newCount);
+            countNode[newCount] = newNode;
+            if (currNode) {
+                insertNode(currNode, newNode);
+            }
+            else {
+                insertNode(head, newNode);
+            }
+        }
+
+        newNode->keys.insert(key);
+
+        if (currNode) {
+            currNode->keys.erase(key);
+            if (currNode->keys.empty()) {
+                removeNode(currNode);
+            }
+        }
+    }
+    
+    void dec(string key) {
+        int currCount = keyCount[key];
+        if (currCount == 0) return;
+        
+        int newCount = currCount - 1;
+        Node* currNode = countNode[currCount];
+        Node* newNode = newCount ? countNode[newCount] : nullptr;
+
+        keyCount[key] = newCount;
+        if (!newCount) keyCount.erase(key);
+
+        if (newCount && !newNode) {
+            newNode = new Node(newCount);
+            countNode[newCount] = newNode;
+            insertNode(currNode->prev, newNode);
+        }
+
+        if (newCount) newNode->keys.insert(key);
+        currNode->keys.erase(key);
+
+        if (currNode->keys.empty()) {
+            removeNode(currNode);
+        }
+    }
+    
+    string getMaxKey() {
+        return head->next == tail ? "" : *tail->prev->keys.begin();
+    }
+    
+    string getMinKey() {
+        return head->next == tail ? "" : *head->next->keys.begin();
+    }
+};
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne* obj = new AllOne();
+ * obj->inc(key);
+ * obj->dec(key);
+ * string param_3 = obj->getMaxKey();
+ * string param_4 = obj->getMinKey();
+ */
