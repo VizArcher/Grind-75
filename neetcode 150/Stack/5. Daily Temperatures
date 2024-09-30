@@ -1,0 +1,24 @@
+// Daily Temperatures : Brute force : TC -> O(n^2) : SC -> O(n)
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        vector<int> result;
+        int n = temperatures.size();
+
+        if (n == 0) return {};
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (temperatures[i] < temperatures[j]) {
+                    result.push_back(j - i);
+                    break;
+                }
+            }
+            if (result.size() == i) {
+                result.push_back(0);
+            }
+        }
+
+        return result;
+    }
+};
