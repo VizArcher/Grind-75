@@ -22,3 +22,27 @@ public:
         return result;
     }
 };
+
+// Stack : TC -> O(n) : SC -> O(n)
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        int n = temperatures.size();
+        vector<int> answer(n, 0); // Initialize the result array with all 0s
+        stack<int> st; // This will store the indices of temperature
+
+        // Traverse each temperature
+        for (int i = 0; i < n; i++) {
+            // While stack is not empty and the current temperature is higher than the temperature at the top of the stack
+            while (!st.empty() && temperatures[i] > temperatures[st.top()]) {
+                int idx = st.top(); // Get the index of the previous day
+                st.pop(); // Remove it from the stack
+                answer[idx] = i - idx; // Calculate the difference in days
+            }
+            // Push the current index onto the stack
+            st.push(i);
+        }
+
+        return answer;
+    }
+};
