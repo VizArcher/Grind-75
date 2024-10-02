@@ -1,0 +1,80 @@
+// Median of Two Sorted Arrays : Brute force : Merge both arrays then sort and find : TC -> O((m + n) * log(m + n)) : SC -> O(m + n)
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        // Get the size kof both input arrays.
+        int n = nums1.size();
+        int m = nums2.size();
+
+        // Merge the arrays
+        vector<int> merged;
+        for (int i = 0; i < n; i++) {
+            merged.push_back(nums1[i]);
+        }
+        for (int i = 0; i < m; i++) {
+            merged.push_back(nums2[i]);
+        }
+
+        // Sort the merged array
+        sort(merged.begin(), merged.end());
+
+        // Find median 
+        int total = m + n;
+
+        if ((m + n) % 2 == 1) {
+            return static_cast<double>(merged[total / 2]);
+        } else {
+            int middle1 = merged[total / 2 - 1];
+            int middle2 = merged[total / 2];
+            return (static_cast<double>(middle1) + static_cast<double>(middle2)) / 2.0;
+        }
+    }
+};
+
+// Binary Search : TC -> O(logm/logn) : SC -> O(1)
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        // Ensure nums1 is the smaller array
+        if (nums1.size() > nums2.size()) {
+            return findMedianSortedArrays(nums2, nums1);
+        }
+
+        int m = nums1.size();
+        int n = nums2.size();
+        int low = 0, high = m;
+
+        while (low <= high) {
+            int partition1 = (low + high) / 2;
+            int partition2 = (m + n + 1) / 2 - partition1;
+
+            // Find elements on the left and right of the partition in both arrays
+            int maxLeft1 = (partition1 == 0) ? INT_MIN : nums1[partition1 - 1];
+            int minRight1 = (partition1 == m) ? INT_MAX : nums1[partition1];
+
+            int maxLeft2 = (partition2 == 0) ? INT_MIN : nums2[partition2 - 1];
+            int minRight2 = (partition2 == n) ? INT_MAX : nums2[partition2];
+
+            // Check if we found the correct partition
+            if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1) {
+                // If total number of elements is odd
+                if ((m + n) % 2 == 1) {
+                    return max(maxLeft1, maxLeft2);
+                }
+                // If even
+                else {
+                    return (max(maxLeft1, maxLeft2) + min(minRight1, minRight2)) / 2.0;
+                }
+            } else if (maxLeft1 > minRight2) {
+                // Move the partition in nums1 to the left
+                high = partition1 - 1;
+            } else {
+                // Move the partition in nums1 to the right
+                low = partition1 + 1;
+            }
+        }
+        
+        // If we can't find a valid partition, return -1 (though the problem guarantees valid input)
+        throw invalid_argument("Input arrays are not valid.");   
+    }
+};
