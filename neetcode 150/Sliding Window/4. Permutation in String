@@ -1,0 +1,34 @@
+// Permutation in String : TC -> O(n2) : SC -> O(1)
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) {
+        int n1 = s1.size(), n2 = s2.size();
+
+        // If s1 is longer than s2, no valid permutation can exist
+        if (n1 > n2) return false;
+
+        vector<int> s1Freq(26, 0); // Frequency of count for s1
+        vector<int> windowFreq(26, 0); // Frequency count for the current window in s2
+
+        // Count frequencies in s1
+        for (int i = 0; i < n1; i++) {
+            s1Freq[s1[i] - 'a']++;
+            windowFreq[s2[i] - 'a']++;
+        }      
+
+        // Check the first window
+        if (s1Freq == windowFreq) return true;
+
+        // Sliding window: start from index 1 to n2 - n1
+        for (int i = n1; i < n2; i++) {
+            // Slide the window: remove leftmost element and add new element
+            windowFreq[s2[i] - 'a']++; // Add the new character
+            windowFreq[s2[i - n1] - 'a']--; // Remove the leftmost character
+
+            // Check if the current window matches 
+            if (s1Freq == windowFreq) return true;
+        }
+        // If no valid permutation was found
+        return false;
+    }
+};
