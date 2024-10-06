@@ -1,4 +1,4 @@
-// Longest Repeating Character Replacement
+// Longest Repeating Character Replacement : TC -> O(n) : SC -> O(n)
 class Solution {
 public:
     int characterReplacement(string s, int k) {
