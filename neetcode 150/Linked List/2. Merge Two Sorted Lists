@@ -1,0 +1,58 @@
+// Merge Two Sorted Lists : TC -> O(m + n) : SC -> O(m + n)
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        // if list1 happen to be NULL
+        // we will simply return list2
+        if (list1 == NULL) {
+            return list2;
+        }
+
+        // same for list2
+        if (list2 == NULL) {
+            return list1;
+        }
+
+        // if value pointend by l1 pointer is less than equal to value pointed by
+        // we will call recursively l1->next and whole l2 list
+        if (list1 -> val <= list2 -> val) {
+            list1 -> next = mergeTwoLists(list1 -> next, list2);
+            return list1;
+        }
+        else {
+            list2 -> next = mergeTwoLists(list1, list2 -> next);
+            return list2;
+        }
+    }
+};
+
+// TC -> O(m + n) : SC -> O(1)
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        // Create a dummy node to act as the start of the merged list
+        ListNode* dummy = new ListNode();
+        ListNode* current = dummy; // This will be used to build the merged list;
+
+        // Traverse both lists
+        while (list1 != nullptr && list2 != nullptr) {
+            if (list1->val <= list2->val) {
+                current->next = list1;
+                list1 = list1->next;
+            } else {
+                current->next = list2;
+                list2 = list2->next;
+            }
+            current = current->next; // Move to the next node in merged list
+        }
+
+        // If one list is exhausted, append the rest of other list
+        if (list1 != nullptr) {
+            current->next = list1;
+        } else {
+            current->next = list2;
+        }
+
+        return dummy->next; // Merged list
+    }
+};
