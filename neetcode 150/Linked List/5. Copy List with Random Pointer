@@ -1,0 +1,30 @@
+// Copy List with Random Pointer : hashmap and linked list : TC -> O(n) : SC -> O(n)
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if (!head) {
+            return nullptr;
+        }
+
+        // Step 1: Create a map from original nodes to their copies
+        unordered_map<Node*, Node*> nodeMap;
+        Node* curr = head;
+
+        // First Pass: create copies of the nodes and store them in the map
+        while (curr) {
+            nodeMap[curr] = new Node(curr->val);
+            curr = curr->next;
+        }
+
+        // step 2: Assign next and random pointers to the copied nodes
+        curr = head;
+        while (curr) {
+            nodeMap[curr] -> next = nodeMap[curr->next]; // set the next pointer
+            nodeMap[curr] -> random = nodeMap[curr->random]; // set the random pointer
+            curr = curr->next;
+        }
+
+        // Return the head of the copied list
+        return nodeMap[head];
+    }
+};
