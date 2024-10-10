@@ -1,0 +1,90 @@
+// LRU Cache : TC -> O(1) : SC -> O(capacity)
+class LRUCache {
+private:
+    // Define a doubly-linked list node structure
+    struct Node {
+        int key;
+        int value;
+        Node* prev;  // Points to the previous node
+        Node* next;  // Points to the next node
+        // Constructor for initializing key-value pair
+        Node(int k, int v) : key(k), value(v), prev(nullptr), next(nullptr) {}
+    };
+
+    int capacity;  // Capacity of the cache
+    unordered_map<int, Node*> cache;  // Hash map for key-node mapping
+    Node* head;  // Dummy head of the doubly-linked list
+    Node* tail;  // Dummy tail of the doubly-linked list
+
+    // Remove a node from its current position in the linked list
+    void removeNode(Node* node) {
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
+    }
+
+    // Add a node to the front (right after head) of the linked list
+    void addToFront(Node* node) {
+        node->next = head->next;
+        node->prev = head;
+        head->next = node;
+        node->next->prev = node;
+    }
+
+public:
+    // Constructor to initialize the cache with a given capacity
+    LRUCache(int capacity) : capacity(capacity) {
+        // Create dummy head and tail to simplify adding/removing nodes
+        head = new Node(0, 0);  // Dummy head node
+        tail = new Node(0, 0);  // Dummy tail node
+        head->next = tail;
+        tail->prev = head;
+    }
+
+    // Get the value associated with the key
+    int get(int key) {
+        // If key is found in the cache
+        if (cache.find(key) != cache.end()) {
+            Node* node = cache[key];
+            // Move the accessed node to the front (most recently used)
+            removeNode(node);
+            addToFront(node);
+            return node->value;  // Return the value
+        }
+        return -1;  // If key is not found, return -1
+    }
+
+    // Insert or update the key-value pair
+    void put(int key, int value) {
+        // If key is already in the cache, update the value
+        if (cache.find(key) != cache.end()) {
+            Node* node = cache[key];
+            node->value = value;
+            // Move the updated node to the front (most recently used)
+            removeNode(node);
+            addToFront(node);
+        } else {
+            // If cache is full, remove the least recently used (LRU) node
+            if (cache.size() == capacity) {
+                Node* lru = tail->prev;  // The node before tail is the LRU node
+                removeNode(lru);  // Remove it from the list
+                cache.erase(lru->key);  // Remove it from the map
+                delete lru;  // Free the memory
+            }
+            // Create a new node and add it to the front
+            Node* newNode = new Node(key, value);
+            cache[key] = newNode;  // Add it to the map
+            addToFront(newNode);  // Move to the front of the list
+        }
+    }
+
+    // Destructor to clean up the allocated memory
+    ~LRUCache() {
+        Node* current = head;
+        // Iterate through the linked list and delete all nodes
+        while (current != nullptr) {
+            Node* next = current->next;
+            delete current;
+            current = next;
+        }
+    }
+};
