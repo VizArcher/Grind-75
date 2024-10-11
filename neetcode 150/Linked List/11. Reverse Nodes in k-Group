@@ -1,0 +1,51 @@
+// Reverse Nodes in k-Group : TC -> O(n) : SC -> O(1)
+class Solution {
+public:
+    // Helper function to reverse a linked list between start and end
+    ListNode* reverseLinkedList(ListNode* head, ListNode* tail) {
+        ListNode* curr = head;
+        ListNode* prev = nullptr;
+
+        while (curr!= tail) {
+            ListNode* nextTemp = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = nextTemp;
+        }
+        return prev;
+    }
+
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        // Dummy node to act as a placeholder for the new head
+        ListNode* dummy = new ListNode(0);
+        dummy->next = head;
+        ListNode* groupPrev = dummy;
+
+        while (true) {
+            // Check if there are k nodes left to reveres
+            ListNode* kthNode = groupPrev;
+            for (int i = 0; i < k; i++) {
+                kthNode = kthNode->next;
+                if (!kthNode) {
+                    return dummy->next; // not enough nodes left to reverse, return result
+                }
+            }
+
+            // Identify the start and end of the current k-group
+            ListNode* groupNext = kthNode->next;
+            ListNode* groupStart = groupPrev->next;
+
+            // Reverse the current group of k nodes
+            ListNode* newGroupStart = reverseLinkedList(groupStart, groupNext);
+
+            // reconnect the reversed group back in list
+            groupPrev->next = newGroupStart;
+            groupStart->next = groupNext;
+
+            // Move groupPrev to the end of the reversed group for the next iteration
+            groupPrev = groupStart;
+        }
+
+        return dummy->next;
+    }
+};
