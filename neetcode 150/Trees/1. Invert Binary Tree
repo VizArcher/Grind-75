@@ -1,0 +1,17 @@
+// Invert Binary Tree : TC -> O(n) : SC -> O(n)
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if (root == NULL)
+            return NULL;
+    
+        TreeNode* dummy;
+        dummy = root->left;
+        root->left = root->right;
+        root->right = dummy;
+
+        invertTree(root->left);
+        invertTree(root->right);
+        return root;
+    }
+};
