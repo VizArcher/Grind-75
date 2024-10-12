@@ -1,0 +1,27 @@
+// Balanced Binary Tree : TC -> O(n) : SC -> O(h)
+class Solution {
+public:
+    // Helper function to calculate the height and check for balance simultaneously
+    int checkHeight(TreeNode* root) {
+        // Base Case: if the node is null, the height is 0 (an empty tree is balanced)
+        if (root == nullptr) return 0;
+
+        // recursively get the height of the left and right subtrees
+        int leftHeight = checkHeight(root->left);
+        int rightHeight = checkHeight(root->right);
+
+        // If any subtree is unbalanced (indicated by -1), propagate -1 upwards
+        if (leftHeight == -1 || rightHeight == -1) return -1;
+
+        // Check if the current node is unbalanced (difference in height > 1) 
+        if (abs(leftHeight - rightHeight) > 1) return -1;
+
+        // return the height of the current node, which is 1 + max(leftHeight, rightHeight)
+        return max(leftHeight, rightHeight) + 1;
+    }
+
+    bool isBalanced(TreeNode* root) {
+        // if the helper function returns -1, the tree is unbalanced otherwise it is balanced
+        return checkHeight(root) != -1;
+    }
+};
