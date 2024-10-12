@@ -1,0 +1,26 @@
+// Divide Intervals Into Minimum Number of Groups : TC -> O(nlogn) : SC -> (n)
+class Solution {
+public:
+    int minGroups(vector<vector<int>>& intervals) {
+        vector<pair<int, int>> events;
+
+        // step 1: For each interval, create a start event and an end event
+        for (auto& interval : intervals) {
+            events.push_back({interval[0], 1}); // start of the interval
+            events.push_back({interval[1] + 1, -1}); // End of the interval (+1 to handle inclusive end)
+        }
+
+        // Step 2: sort the events (first by time, then by type of event)
+        sort(events.begin(), events.end());
+
+        // Step 3: Sweep through the events and track the maximum number of overlapping interval
+        int current_overlap = 0;
+        int max_overlap = 0;
+        for (auto&  event : events) {
+            current_overlap += event.second; // increment or decrement overlap
+            max_overlap = max(max_overlap, current_overlap); // Update maximum overlap
+        }
+
+        return max_overlap;
+    }
+};
