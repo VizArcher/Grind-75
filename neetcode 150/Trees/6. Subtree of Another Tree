@@ -1,0 +1,24 @@
+// Subtree of Another Tree : TC -> O(m * n) : SC -> O(h)
+class Solution {
+public:
+    // Helper function to check if two trees are the same
+    bool isSameTree(TreeNode* s, TreeNode* t) {
+        if (s == nullptr && t == nullptr) return true; // Both are null
+        if (s == nullptr || t == nullptr) return false; // one is null, the other isn't
+        if (s->val != t->val) return false; // values don't match 
+
+        // Recursively check the left and right subtrees
+        return isSameTree(s->left, t->left) && isSameTree(s->right, t->right);
+    }
+
+    // Main function to check if subRoot is a subtree of root
+    bool isSubtree(TreeNode* root, TreeNode* subRoot) {
+        if (root == nullptr) return false; // If root is null, subtree cannot exist
+        
+        // check if the current trees are the same
+        if (isSameTree(root, subRoot)) return true;
+
+        // Recursively check left and right subtrees
+        return isSubtree(root->left, subRoot) || isSubtree(root->right, subRoot);
+    }
+};
