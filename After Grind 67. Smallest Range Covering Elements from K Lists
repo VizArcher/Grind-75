@@ -1,0 +1,48 @@
+// Smallest Range Covering Elements from K Lists : minheap use : TC -> O(NlogK) : SC -> O(K)
+class Solution {
+public:
+    vector<int> smallestRange(vector<vector<int>>& nums) {
+        // Min-heap to store (value, list index, element index)
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> minHeap;
+        int currentMax = INT_MIN;
+
+        // Initialize heap with the first element from each list
+        for (int i = 0; i < nums.size(); i++) {
+            minHeap.push({nums[i][0], i, 0}); // {value, list index, element index}
+            currentMax = max(currentMax, nums[i][0]); // Track the max element;
+        }
+
+        // Initialize the smallest range variables
+        int startRange = minHeap.top()[0], endRange = currentMax;
+
+        // While the heap is not empty, process each element
+        while (!minHeap.empty()) {
+            vector<int> current = minHeap.top();
+            minHeap.pop();
+
+            int currentMin = current[0];
+            int listIndex = current[1];
+            int elementIndex = current[2];
+
+            // Update the range if it's smaller than previous range
+            if (currentMax - currentMin < endRange - startRange) {
+                startRange = currentMin;
+                endRange = currentMax;
+            }
+
+            // If we have reached the end of current list, break the loop
+            if (elementIndex + 1 == nums[listIndex].size()) {
+                break;
+            }
+
+            // Add the next element from the same list to the heap 
+            int nextElement = nums[listIndex][elementIndex + 1];
+            minHeap.push({nextElement, listIndex, elementIndex + 1});
+
+            // Update the current maximum value
+            currentMax = max(currentMax, nextElement);
+        }
+
+        return {startRange, endRange};
+    }
+};
