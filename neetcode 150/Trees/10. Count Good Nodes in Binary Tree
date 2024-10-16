@@ -1,0 +1,27 @@
+// Count Good Nodes in Binary Tree : TC -> O(n) : SC -> O(h)
+class Solution {
+public:
+    int countGoodNodes(TreeNode* root, int maxVal) {
+        // If the node is NULL, no good nodes to count
+        if (!root) return 0;
+
+        // Check if the current node is a good node
+        int goodNodeCount = 0;
+        if (root->val >= maxVal) {
+            goodNodeCount = 1;
+        }
+
+        // Update the maximum value seen so far on the path 
+        maxVal = max(maxVal, root->val);
+
+        // Recursively count the good nodes in the left and right subtrees
+        goodNodeCount += countGoodNodes(root->left, maxVal);
+        goodNodeCount += countGoodNodes(root->right, maxVal);
+
+        return goodNodeCount;
+    }
+    int goodNodes(TreeNode* root) {
+        // Initialize with the root node and its value as the maximum
+        return countGoodNodes(root, root->val);
+    }
+};
