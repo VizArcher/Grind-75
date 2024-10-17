@@ -1,0 +1,13 @@
+// Validate Binary Search Tree : TC -> O(n) : SC -> O(n)
+class Solution {
+public:
+    bool isBSTutil(TreeNode* root, long minval, long maxval) {
+        if (root == NULL) return true;
+        if (root->val >= maxval || root->val <= minval)
+            return false;
+        return isBSTutil(root->left, minval, root->val) && isBSTutil(root->right, root->val, maxval);
+    }
+    bool isValidBST(TreeNode* root) {
+        return isBSTutil(root, LONG_MIN, LONG_MAX);
+    }
+};
