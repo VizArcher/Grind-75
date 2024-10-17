@@ -1,0 +1,31 @@
+// Kth Smallest Element in a BST : TC -> O(k) : SC -> O(h)
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        stack<TreeNode*> st;
+        TreeNode* current = root;
+
+        while (current != nullptr || !st.empty()){
+            // Got to the leftmost node
+            while (current != nullptr) {
+                st.push(current);
+                current = current->left;
+            }
+        
+            // Pop the node from the stack (visit the node)
+            current = st.top();
+            st.pop();
+            int count = 0;
+            k--; // we visited the node
+
+            // If k reaches 0, we have found the k-th smallest element 
+            if (k == 0) 
+                return current->val;
+
+            // Move to the right subtree
+            current = current->right;
+
+        }
+        return -1;
+    }
+};
