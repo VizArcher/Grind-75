@@ -1,31 +1,44 @@
-// Construct Binary Tree from Preorder and Inorder Traversal
+//Construct Binary Tree from Preorder and Inorder Traversal : TC -> O(n) : SC -> O(n)
 class Solution {
 public:
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        map<int, int> inMap;
+    unordered_map<int, int> inorderIndexMap; // To store the index of each value in inorder array
 
-        for(int i = 0; i < inorder.size(); i++){
-            inMap[inorder[i]] = i;
+    // Helper function to recursively build the tree 
+    TreeNode* buildTreeHelper(vector<int>& preorder, int preStart, int preEnd,
+                            vector<int>& inorder, int inStart, int inEnd) {
+        // Base Case: If there are no elements to construct the tree
+        if (preStart > preEnd || inStart > inEnd) {
+            return nullptr;
         }
 
-        TreeNode* root = buildTree(preorder, 0, preorder.size() - 1,
-                                   inorder, 0, inorder.size() - 1, inMap);
-        return root;
-    }
-    TreeNode* buildTree(vector<int>& preorder, int preStart, int preEnd,
-                        vector<int>& inorder, int inStart, int inEnd, map<int, int>& inMap){
-        if(preStart > preEnd || inStart > inEnd) return NULL;
+        // The first element in preorder is the root node
+        int rootValue = preorder[preStart];
+        TreeNode* root = new TreeNode(rootValue);
 
-        TreeNode* root = new TreeNode(preorder[preStart]);
+        // Get the index of the root value in the inorder array
+        int rootIndex = inorderIndexMap[rootValue];
+        
+        // Number of nodes in the left subtree
+        int leftTreeSize = rootIndex - inStart;
 
-        int inRoot = inMap[root -> val];
-        int numsLeft = inRoot - inStart;
+        // Recursively construct the left subtree
+        root-> left = buildTreeHelper(preorder, preStart + 1, preStart + leftTreeSize,
+                                    inorder, inStart, rootIndex - 1);
 
-        root -> left = buildTree(preorder, preStart + 1, preStart + numsLeft,
-                                 inorder, inStart, inRoot - 1, inMap); 
-        root -> right = buildTree(preorder, preStart + numsLeft + 1, preEnd,
-                                 inorder, inRoot + 1, inEnd, inMap); 
+        // Recursively construct the right subtree
+        root-> right = buildTreeHelper(preorder, preStart + leftTreeSize + 1, preEnd,
+                                    inorder, rootIndex + 1, inEnd);
         
         return root;
+    }
+
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        // Build a map to store the index of each element in the inorder traversal
+        for (int i = 0; i < inorder.size(); i++) {
+            inorderIndexMap[inorder[i]] = i;
+        }
+
+        // Call the recursive helper function to build the tree
+        return buildTreeHelper(preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1);
     }
 };
