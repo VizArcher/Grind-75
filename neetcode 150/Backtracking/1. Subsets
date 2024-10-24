@@ -1,0 +1,25 @@
+//
+class Solution {
+public:
+    void backtrack(vector<int>& nums, vector<vector<int>>& result, vector<int>& subset, int start) {
+        // Add the current subset to the result
+        result.push_back(subset);
+        
+        // Explore further elements to include in the subset
+        for (int i = start; i < nums.size(); i++) {
+            // Include nums[i] in the current subset
+            subset.push_back(nums[i]);
+            // Move on to the next element
+            backtrack(nums, result, subset, i + 1);
+            // Exclude nums[i] from the current subset (backtrack)
+            subset.pop_back();
+        }
+    }
+    
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> result;
+        vector<int> subset;
+        backtrack(nums, result, subset, 0);
+        return result;
+    }
+};
