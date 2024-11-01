@@ -1,0 +1,40 @@
+// N - Queens : TC -> O(N!) : SC -> O(N^2)
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> solutions;
+        vector<string> board(n , string(n, '.')); // Initialize the board with  '.'
+        vector<bool> columns(n, false); // Track if a column has a queen
+        vector<bool> mainDiag(2 * n - 1, false); // Tracl mini diagonals
+        vector<bool> antiDiag(2 * n - 1, false); // Track anti-diagonals
+        solve(0, n, board, solutions, columns, mainDiag, antiDiag);
+        return solutions;
+    }
+
+private:
+    void solve(int row, int n, vector<string>& board, vector<vector<string>>& solutions,
+                vector<bool>&columns, vector<bool>& mainDiag, vector<bool>& antiDiag) {
+        if (row == n) { // All queens are placed
+            solutions.push_back(board);
+            return;
+        }
+
+        for (int col = 0; col < n; col++) {
+            // Check if the postion is safe 
+            if (columns[col] || mainDiag[row - col + n - 1] || antiDiag[row + col]) {
+                continue;
+            }
+
+            // Place queen
+            board[row][col] = 'Q';
+            columns[col] = mainDiag[row - col + n - 1] = antiDiag[row + col] = true;
+
+            // Move to the next row
+            solve(row + 1, n, board, solutions, columns, mainDiag, antiDiag);
+
+            // Remove queen
+            board[row][col] = '.';
+            columns[col] = mainDiag[row - col + n - 1] = antiDiag[row + col] = false;
+        }
+    }
+};
