@@ -1,0 +1,32 @@
+// Kth Largest Element in a Stream : TC -> O(log k) : SC -> O(k)
+class KthLargest {
+public:
+    int k;
+    priority_queue<int, vector<int>, greater<int>> minHeap; // Min-heap
+
+    // Constructor initializes the heap with the k largest elements of the initial stream
+    KthLargest(int k, vector<int>& nums) {
+        this->k = k;
+        
+        for (int num : nums) {
+            minHeap.push(num);
+            // Maintain the heap size to k
+            if (minHeap.size() > k) {
+                minHeap.pop();
+            }
+        }
+    }
+    
+    // Function to add a new element and return the kth largest element
+    int add(int val) {
+        minHeap.push(val);
+        
+        // If heap size exceeds k, remove the smallest element
+        if (minHeap.size() > k) {
+            minHeap.pop();
+        }
+        
+        // The kth largest element is now at the top of the min-heap
+        return minHeap.top();
+    }
+};
